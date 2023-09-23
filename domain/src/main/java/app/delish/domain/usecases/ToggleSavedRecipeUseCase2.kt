@@ -8,11 +8,11 @@ class ToggleSavedRecipeUseCase2 @Inject constructor(
     private val recipesRepository: RecipesRepository,
 ) {
 
-    suspend fun execute(parameters: RecipesItem) {
-        if (parameters.saved) {
-            recipesRepository.saveRecipe(parameters)
-        } else {
+    suspend fun execute(parameters: RecipesItem, isBookmarked: Boolean) {
+        if (isBookmarked) {
             recipesRepository.deleteRecipe(parameters.id)
+        } else {
+            recipesRepository.saveRecipe(parameters)
         }
     }
 }

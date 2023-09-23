@@ -4,15 +4,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import app.delish.domain.usecases.ToggleSavedRecipeUseCase2
 import app.delish.domain.usecases.recipes.information.GetRecipeInformationUseCase
+import com.elbehiry.model.RecipesItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
-const val RECIPE_ID = "recipeId"
-private const val DEFAULT_RECIPE_ID = -1
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
@@ -35,11 +33,7 @@ class DetailsViewModel @Inject constructor(
 
     override fun onUiEvent(event: DetailsContract.UiEvents) {
         when (event) {
-            is DetailsContract.UiEvents.ToggleBookMark -> {
-                viewModelScope.launch {
-                    toggleSavedRecipeUseCase2.execute(event.recipesItem)
-                }
-            }
+            is DetailsContract.UiEvents.ToggleBookMark -> toggleSavedRecipe(event.recipesItem, event.bookmarked)
             is DetailsContract.UiEvents.GetRecipe -> TODO()
         }
     }
@@ -51,7 +45,21 @@ class DetailsViewModel @Inject constructor(
             updateUiState {
                 it.copy(
                     isLoading = false,
-                    recipe = recipe
+                    recipe = recipe,
+                    isBookmarked = recipe.saved
+                )
+            }
+        }
+    }
+
+    private fun toggleSavedRecipe(recipesItem: RecipesItem, isBookmarked: Boolean) {
+        viewModelScope.launch {
+            toggleSavedRecipeUseCase2.execute(recipesItem, isBookmarked)
+
+            updateUiState {
+                it.copy(
+                    isLoading = false,
+                    isBookmarked = !isBookmarked
                 )
             }
         }
@@ -61,9 +69,11 @@ class DetailsViewModel @Inject constructor(
         fun initialUiState() = DetailsContract.UiState(
             isLoading = true,
             hasError = false,
-            recipe = null
+            recipe = null,
+            isBookmarked = false,
         )
 
-        private const val DEFAULT_RECIPE_ID = -1
+        const val RECIPE_ID = "recipeId"
+        const val DEFAULT_RECIPE_ID = -1
     }
 }

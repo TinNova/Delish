@@ -25,6 +25,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.IosShare
@@ -36,12 +37,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import app.delish.details.R
+import app.delish.details.vm.DetailsContract
 import com.elbehiry.model.RecipesItem
 
 @Composable
 fun RecipeOptions(
     recipe: RecipesItem,
+    isBookMarked: Boolean,
     onSave: (RecipesItem) -> Unit
 ) {
     Row(
@@ -77,7 +79,7 @@ fun RecipeOptions(
                 tint = Color.White
             )
             Text(
-                text = "${(recipe.spoonacularScore?:0).toInt()}",
+                text = "${(recipe.spoonacularScore ?: 0).toInt()}",
                 color = Color.White,
                 style = MaterialTheme.typography.subtitle2,
                 fontSize = 12.sp
@@ -85,7 +87,8 @@ fun RecipeOptions(
         }
 
         TextButton(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
                 .align(Alignment.CenterVertically),
             onClick = {
                 onSave(recipe)
@@ -93,7 +96,7 @@ fun RecipeOptions(
         ) {
             Icon(
                 modifier = Modifier.padding(end = 4.dp),
-                imageVector = Icons.Filled.BookmarkBorder,
+                imageVector = if (isBookMarked) Icons.Filled.Bookmark else Icons.Filled.BookmarkBorder,
                 contentDescription = null,
                 tint = Color.White
             )

@@ -80,9 +80,8 @@ internal fun DetailScreen(
                 }
 
                 item {
-                    RecipeOptions(recipe) { recipe ->
-                        recipe.saved = !recipe.saved
-                        viewModel.onUiEvent(DetailsContract.UiEvents.ToggleBookMark(recipe))
+                    RecipeOptions(recipe, viewState.isBookmarked) { recipe ->
+                        viewModel.onUiEvent(DetailsContract.UiEvents.ToggleBookMark(recipe, viewState.isBookmarked))
                     }
                 }
                 item { RecipeDivider() }

@@ -11,13 +11,14 @@ interface DetailsContract {
 
     @Immutable
     data class UiState(
-        val isLoading: Boolean = true,
-        val hasError: Boolean = false,
-        val recipe: RecipesItem? = null
+        val isLoading: Boolean,
+        val hasError: Boolean,
+        val recipe: RecipesItem?,
+        val isBookmarked: Boolean
     ) : BaseUiState
 
     sealed class UiEvents: BaseUiEvent {
         data class GetRecipe(val recipeId : Int) : UiEvents()
-        data class ToggleBookMark(val recipesItem: RecipesItem) : UiEvents()
+        data class ToggleBookMark(val recipesItem: RecipesItem, val bookmarked: Boolean) : UiEvents()
     }
 }
