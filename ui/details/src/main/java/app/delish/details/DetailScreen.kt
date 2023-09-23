@@ -23,8 +23,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import app.delish.compose.ui.ScrollableBackground
 import app.delish.details.vm.DetailsViewModel
-import app.delish.details.vm.ViewEvent
 import app.delish.compose.view.CircularLoading
+import app.delish.details.vm.DetailsContract
 
 private const val RECIPE_TITLE_ITEM_KEY = "RecipeTitleCompose"
 
@@ -51,7 +51,7 @@ internal fun DetailScreen(
         .statusBarsPadding()
         .background(color = MaterialTheme.colors.background)
 ) {
-    val viewState by viewModel.states.collectAsStateWithLifecycle()
+    val viewState by viewModel.uiState.collectAsStateWithLifecycle()
 
     CircularLoading(
         isLoading = viewState.isLoading,
@@ -82,7 +82,7 @@ internal fun DetailScreen(
                 item {
                     RecipeOptions(recipe) { recipe ->
                         recipe.saved = !recipe.saved
-                        viewModel.processEvent(ViewEvent.ToggleBookMark(recipe))
+                        viewModel.onUiEvent(DetailsContract.UiEvents.ToggleBookMark(recipe))
                     }
                 }
                 item { RecipeDivider() }

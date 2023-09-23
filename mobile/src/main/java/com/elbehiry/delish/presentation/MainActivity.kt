@@ -17,6 +17,7 @@
 package com.elbehiry.delish.presentation
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -33,8 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.ViewTreeLifecycleOwner
-import androidx.lifecycle.ViewTreeViewModelStoreOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.lifecycle.findViewTreeViewModelStoreOwner
+import androidx.lifecycle.setViewTreeLifecycleOwner
+import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.findViewTreeSavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import app.delish.compose.theme.BottomSheetShape
@@ -78,11 +81,11 @@ class MainActivity : ComponentActivity() {
 
 private fun ComponentActivity.setOwners() {
     val decorView = window.decorView
-    if (ViewTreeLifecycleOwner.get(decorView) == null) {
-        ViewTreeLifecycleOwner.set(decorView, this)
+    if (decorView.findViewTreeLifecycleOwner() == null) {
+        decorView.setViewTreeLifecycleOwner(this)
     }
-    if (ViewTreeViewModelStoreOwner.get(decorView) == null) {
-        ViewTreeViewModelStoreOwner.set(decorView, this)
+    if (decorView.findViewTreeViewModelStoreOwner() == null) {
+        decorView.setViewTreeViewModelStoreOwner(this)
     }
     if (decorView.findViewTreeSavedStateRegistryOwner() == null) {
         decorView.setViewTreeSavedStateRegistryOwner(this)

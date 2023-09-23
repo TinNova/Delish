@@ -24,9 +24,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 class GetRecipeInformationUseCase @Inject constructor(
-    private val recipesRepository: RecipesRepository,
-    @IoDispatcher ioDispatcher: CoroutineDispatcher
-) : SuspendUseCase<Int, RecipesItem>(ioDispatcher) {
-    override suspend fun execute(parameters: Int): RecipesItem =
+    private val recipesRepository: RecipesRepository
+) {
+    suspend fun execute(parameters: Int): RecipesItem =
         recipesRepository.getRecipeInformation(parameters)
 }

@@ -1,21 +1,13 @@
 package app.delish.details.vm
 
 import androidx.lifecycle.SavedStateHandle
-import app.delish.base.vm.MviViewModel
-import app.delish.details.vm.ViewEvent.GetRecipe
-import app.delish.details.vm.ViewEvent.ToggleBookMark
-import app.delish.details.vm.ViewResult.ErrorResult
-import app.delish.details.vm.ViewResult.NoOpResult
-import app.delish.details.vm.ViewResult.RecipeItem
-import app.delish.domain.usecases.ToggleSavedRecipeUseCase
+import androidx.lifecycle.viewModelScope
+import app.delish.domain.usecases.ToggleSavedRecipeUseCase2
 import app.delish.domain.usecases.recipes.information.GetRecipeInformationUseCase
-import app.delish.result.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -23,52 +15,55 @@ const val RECIPE_ID = "recipeId"
 private const val DEFAULT_RECIPE_ID = -1
 
 @HiltViewModel
-internal class DetailsViewModel @Inject constructor(
-    private val getRecipeInformationUseCase: GetRecipeInformationUseCase,
-    private val toggleSavedRecipeUseCase: ToggleSavedRecipeUseCase,
+class DetailsViewModel @Inject constructor(
+    private val getRecipeInformationUseCase2: GetRecipeInformationUseCase,
+    private val toggleSavedRecipeUseCase2: ToggleSavedRecipeUseCase2,
     savedStateHandle: SavedStateHandle
-) : MviViewModel<ViewEvent, ViewResult, ViewState, ViewEffect>(ViewState()) {
+) : DetailsContract.ViewModel() {
 
     private val recipeId: Int = savedStateHandle[RECIPE_ID] ?: DEFAULT_RECIPE_ID
+    override val _uiState: MutableStateFlow<DetailsContract.UiState> =
+        MutableStateFlow(initialUiState())
+
+    private val recipeExceptionHandler = CoroutineExceptionHandler { _, _ ->
+        updateUiState { it.copy(isLoading = false, hasError = true) }
+    }
 
     init {
-        processEvent(GetRecipe(recipeId))
+        getRecipes(recipeId)
     }
 
-    override fun Flow<ViewEvent>.toResults(): Flow<ViewResult> {
-        return merge(
-            filterIsInstance<GetRecipe>().toGetRecipeResult(),
-            filterIsInstance<ToggleBookMark>().toToggleBookMarkResult()
-        )
-    }
-
-    override fun ViewResult.reduce(state: ViewState): ViewState {
-        return when (this) {
-            is ErrorResult -> state.copy(isLoading = false, hasError = true)
-            is RecipeItem -> state.copy(
-                isLoading = false,
-                hasError = false,
-                recipe = recipe
-            )
-            else -> state
-        }
-    }
-
-    private fun Flow<GetRecipe>.toGetRecipeResult(): Flow<ViewResult> {
-        return mapLatest { getRecipeInformationUseCase(it.recipeId) }
-            .map {
-                if (it is Result.Success) {
-                    RecipeItem(it.data)
-                } else {
-                    ErrorResult
+    override fun onUiEvent(event: DetailsContract.UiEvents) {
+        when (event) {
+            is DetailsContract.UiEvents.ToggleBookMark -> {
+                viewModelScope.launch {
+                    toggleSavedRecipeUseCase2.execute(event.recipesItem)
                 }
             }
+            is DetailsContract.UiEvents.GetRecipe -> TODO()
+        }
     }
 
-    private fun Flow<ToggleBookMark>.toToggleBookMarkResult(): Flow<ViewResult> {
-        return mapLatest {
-            toggleSavedRecipeUseCase(it.recipesItem)
-            NoOpResult
+    private fun getRecipes(recipeId: Int) {
+        viewModelScope.launch(recipeExceptionHandler) {
+            val recipe = getRecipeInformationUseCase2.execute(recipeId)
+
+            updateUiState {
+                it.copy(
+                    isLoading = false,
+                    recipe = recipe
+                )
+            }
         }
+    }
+
+    private companion object {
+        fun initialUiState() = DetailsContract.UiState(
+            isLoading = true,
+            hasError = false,
+            recipe = null
+        )
+
+        private const val DEFAULT_RECIPE_ID = -1
     }
 }
