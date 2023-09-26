@@ -30,16 +30,17 @@ private const val RECIPE_TITLE_ITEM_KEY = "RecipeTitleCompose"
 
 @Composable
 fun DetailScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: DetailsViewModel
 ) {
-    DetailScreen(
-        viewModel = hiltViewModel(),
+    DetailContent(
+        viewModel = viewModel,
         navController = navController
     )
 }
 
 @Composable
-internal fun DetailScreen(
+internal fun DetailContent(
     viewModel: DetailsViewModel,
     navController: NavController,
     scrollState: LazyListState = rememberLazyListState(),

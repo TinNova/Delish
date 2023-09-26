@@ -97,7 +97,7 @@ fun RecipeOptions(
             Icon(
                 modifier = Modifier.padding(end = 4.dp),
                 imageVector = if (isBookMarked) Icons.Filled.Bookmark else Icons.Filled.BookmarkBorder,
-                contentDescription = null,
+                contentDescription = "bookMark",
                 tint = Color.White
             )
             Text(

@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavGraphBuilder
@@ -282,7 +283,9 @@ fun NavGraphBuilder.detailsScreen(
         }
     ) { entry ->
         bottomBarState.value = false
-        DetailScreen(navController = navController)
+        DetailScreen(
+            navController = navController,
+            viewModel = hiltViewModel())
     }
 }
 
