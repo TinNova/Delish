@@ -33,7 +33,12 @@ class DetailsViewModel @Inject constructor(
 
     override fun onUiEvent(event: DetailsContract.UiEvents) {
         when (event) {
-            is DetailsContract.UiEvents.ToggleBookMark -> toggleSavedRecipe(event.recipesItem, event.bookmarked)
+            is DetailsContract.UiEvents.ToggleBookMark -> {
+                toggleSavedRecipe(
+                    event.recipesItem,
+                    event.bookmarked
+                )
+            }
             is DetailsContract.UiEvents.GetRecipe -> TODO()
         }
     }
@@ -65,7 +70,7 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    private companion object {
+    companion object {
         fun initialUiState() = DetailsContract.UiState(
             isLoading = true,
             hasError = false,

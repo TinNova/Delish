@@ -118,6 +118,13 @@ dependencies {
     implementation(libs.hilt.library)
     implementation(libs.hilt.compose)
     kapt(libs.hilt.compiler)
+    kaptTest(libs.hilt.compiler)
+    testImplementation(libs.hilt.testing)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.compose.ui.test)
+
+//    androidTestImplementation(libs.mockk) //mockkInstrumentation
+    testImplementation(libs.mockk)
 
     // Androidx
     implementation(libs.androidx.appcompat)

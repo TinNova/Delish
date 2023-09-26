@@ -47,11 +47,13 @@ mockk = "1.13.2"
 assertj = "3.23.1"
 mockito = "4.8.1"
 mockito_kotlin = "4.0.0"
-turbine = "1.0.2"
+turbine = "0.12.1"
 faker = "1.0.2"
 paging = "3.1.1"
 lottie = "5.2.0"
 splash = "1.0.0"
+robolectric = "4.10.3"
+junit5Version = "5.7.2"
 
 [libraries]
 junit = { module = "junit:junit", version.ref = "junit" }
@@ -97,6 +99,11 @@ compose-ui-viewbinding = { module = "androidx.compose.ui:ui-viewbinding" }
 compose_constraint_layout = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "compose_constraintlayout" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
 
+jUnit5-api              = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5Version" }
+jUnit5-JupiterEngine    = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5Version"}
+jUnit5-VintageEngine    = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5Version"}
+jUnit5-Params           = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit5Version"}
+
 accompanist_insets = { module = "com.google.accompanist:accompanist-insets", version.ref = "accompanist" }
 accompanist_permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
@@ -120,6 +127,8 @@ hilt-work = "androidx.hilt:hilt-work:1.0.0"
 hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 dagger-dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
+
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric"}
 
 coroutines_core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines"}
 coroutines_android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines"}
@@ -160,6 +169,7 @@ dokka_gradle_plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", vers
 dokka_core = { module = "org.jetbrains.dokka:dokka-core", version.ref = "dokka"}
 android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
@@ -171,5 +181,6 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 android-lint = { id = "com.android.lint", version.ref = "agp" }
 android-test = { id = "com.android.test", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = "com.google.devtools.ksp:1.8.0-1.0.8"

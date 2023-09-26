@@ -34,6 +34,14 @@ dependencies {
     implementation(libs.compose.constraint.layout)
     implementation(libs.compose.material.iconsext)
 
+    api (libs.turbine)
+
+    api(libs.jUnit5.api)
+    api(libs.jUnit5.jupiterEngine)
+    api(libs.jUnit5.vintageEngine)
+    api(libs.jUnit5.params)
+    api(libs.kotlin.test)
+
     implementation(libs.hilt.compose)
     implementation(libs.hilt.library)
     kapt(libs.hilt.compiler)
